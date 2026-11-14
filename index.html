@@ -126,7 +126,7 @@ async function demarrer(){
 async function connecter(e){
   e.preventDefault();
   const { error } = await sb.auth.signInWithPassword({ email: $('email').value, password: $('mdp').value });
-  if (error){ $('lerr').textContent = "E-mail ou mot de passe incorrect"; return false; }
+  if (error){ $('lerr').textContent = "Erreur : " + error.message; return false; }
   $('lerr').textContent = ''; demarrer(); return false;
 }
 async function sortir(){ await sb.auth.signOut(); clearInterval(timer); location.reload(); }
