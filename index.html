@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f7f8fa">
+  <meta name="theme-color" content="#231712">
   <title>SEZAR</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="login" hidden>
-    <form id="loginForm" autocomplete="on">
-      <div class="brand">
+    <form id="loginForm" autocomplete="on" class="login-card">
+      <div class="brand-block">
         <span class="brand-name">SEZAR</span>
         <span class="brand-sub" id="loginSub">Connexion au système</span>
       </div>
@@ -33,89 +33,89 @@
   </div>
 
   <main class="page">
-    <header class="header">
-      <div class="brand">
-        <span class="brand-name">SEZAR</span>
-        <span class="brand-sub" id="headerSub">Surveillance</span>
+    <header class="topbar">
+      <div class="welcome-block">
+        <span class="eyebrow">Bonjour, Landry</span>
+        <strong>Bon retour</strong>
       </div>
-      <div class="status-pills" aria-label="État des liaisons">
-        <span class="pill"><span class="dot" id="dotPc" aria-hidden="true"></span>PC</span>
-        <span class="pill"><span class="dot" id="dotEsp" aria-hidden="true"></span>ESP32</span>
-        <span class="pill"><span class="dot" id="dotCam" aria-hidden="true"></span>Caméra</span>
-      </div>
+      <button type="button" class="notif" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+      </button>
     </header>
 
-    <section class="card etat" id="etatCard" aria-labelledby="etatTitre">
-      <div class="etat-ic" id="etatIcon" aria-hidden="true"></div>
-      <h1 class="etat-titre" id="etatTitre">Chargement</h1>
-      <p class="etat-details" id="etatDetails">Connexion au système…</p>
-    </section>
+    <nav class="filters" aria-label="Filtres">
+      <button type="button" class="filter-chip is-active" data-filter="all">Tout</button>
+      <button type="button" class="filter-chip" data-filter="alerts">Alertes</button>
+      <button type="button" class="filter-chip" data-filter="devices">Appareils</button>
+    </nav>
 
-    <section class="card actions" aria-labelledby="actionsTitre">
-      <h2 class="section-title" id="actionsTitre">Actions</h2>
-      <div class="actions-grid">
-        <button type="button" class="btn btn-primary" id="btnArm">Armer</button>
-        <button type="button" class="btn" id="btnDesarm">Désarmer</button>
-        <button type="button" class="btn btn-danger" id="btnSirene">Couper la sirène</button>
-        <button type="button" class="btn btn-ghost" id="btnTest">Tester l'alarme</button>
+    <section class="panel status-panel">
+      <div class="status-card" id="etatCard">
+        <div class="status-ic" id="etatIcon" aria-hidden="true"></div>
+        <div class="status-copy">
+          <h1 id="etatTitre">Chargement</h1>
+          <p id="etatDetails">Connexion au système…</p>
+        </div>
       </div>
     </section>
 
-    <section class="card live" id="blocLive" aria-labelledby="liveTitre" hidden>
-      <h2 class="section-title" id="liveTitre">Vue en direct</h2>
-      <div class="live-wrap">
-        <img id="liveImg" class="live-img" alt="Vue en direct de la caméra">
+    <section class="panel scenes-panel" aria-labelledby="scenesTitre">
+      <div class="panel-head">
+        <h2 id="scenesTitre">Scènes</h2>
       </div>
-      <p class="muted small">Mise à jour automatique en mode local.</p>
+      <div class="scenes-grid" id="sceneGrid"></div>
     </section>
 
-    <section class="card journal" aria-labelledby="journalTitre">
-      <h2 class="section-title" id="journalTitre">Journal des intrusions</h2>
-      <div id="journalListe">
-        <p class="empty">Aucune intrusion enregistrée.</p>
+    <section class="panel devices-panel" aria-labelledby="devicesTitre">
+      <div class="panel-head">
+        <h2 id="devicesTitre">Appareils</h2>
       </div>
+      <div id="deviceList" class="device-list"></div>
     </section>
 
-    <section class="card infos" aria-labelledby="infosTitre">
-      <h2 class="section-title" id="infosTitre">Informations</h2>
-      <dl class="info-list">
-        <div class="info-row">
-          <dt>PC</dt>
-          <dd id="infoPc">—</dd>
-        </div>
-        <div class="info-row">
-          <dt>ESP32</dt>
-          <dd id="infoEsp">—</dd>
-        </div>
-        <div class="info-row">
-          <dt>Caméra</dt>
-          <dd id="infoCam">—</dd>
-        </div>
-        <div class="info-row">
-          <dt>Dernière synchronisation</dt>
-          <dd id="infoMaj">—</dd>
-        </div>
-        <div class="info-row">
-          <dt>Nombre d'alertes</dt>
-          <dd id="infoNb">—</dd>
-        </div>
-        <div class="info-row" id="infoIpRow" hidden>
-          <dt>Adresse IP</dt>
-          <dd id="infoIp">—</dd>
-        </div>
-      </dl>
-      <div class="infos-actions" id="zoneDeconnexion" hidden>
-        <button type="button" class="btn-link" id="btnDeconnexion">Se déconnecter</button>
+    <section class="panel live-panel" aria-labelledby="liveTitre">
+      <div class="live-header">
+        <span class="live-badge">EN DIRECT</span>
+        <button type="button" class="ghost-button" id="btnFullscreen">Plein écran</button>
       </div>
+      <div class="live-frame">
+        <img id="liveImg" alt="Vue en direct de la caméra">
+      </div>
+      <div class="live-status" id="liveStatus">Caméra hors ligne</div>
     </section>
+
+    <section class="panel journal-panel" aria-labelledby="journalTitre">
+      <div class="panel-head">
+        <h2 id="journalTitre">Journal des intrusions</h2>
+      </div>
+      <div id="journalListe" class="journal-list"></div>
+    </section>
+
+    <div class="assistant-wrapper">
+      <button type="button" class="assistant-toggle" id="assistantToggle" aria-label="Assistant SEZAR">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15V8a6 6 0 0 1 12 0v7"/><path d="M8 18h8a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z"/><path d="M9 12h6"/></svg>
+      </button>
+      <aside id="assistantPanel" class="assistant-panel" hidden>
+        <div class="assistant-header">
+          <strong>Assistant local</strong>
+          <button type="button" class="mini-close" id="assistantClose">×</button>
+        </div>
+        <div id="assistantMessages" class="assistant-messages" aria-live="polite"></div>
+        <div class="assistant-suggestions" id="assistantSuggestions"></div>
+        <div class="assistant-input-row">
+          <input id="assistantInput" type="text" maxlength="300" placeholder="Demander l'état…">
+          <button type="button" id="assistantSend">Envoyer</button>
+        </div>
+      </aside>
+    </div>
   </main>
 
-  <div class="lightbox" id="lightbox" hidden>
+  <div id="lightbox" class="lightbox" hidden>
     <button type="button" class="lightbox-close" id="lightboxClose">Fermer</button>
-    <img id="lightboxImg" class="lightbox-img" alt="Photo d'intrusion agrandie">
+    <img id="lightboxImg" class="lightbox-img" alt="Photo de l'intrusion">
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="config.js"></script>
